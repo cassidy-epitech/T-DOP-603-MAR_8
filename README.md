@@ -1,10 +1,14 @@
-# Bernstein
+<div align="center">
+
+# 🗳️ Bernstein
+
+</div>
 
 Bernstein is a Kubernetes deployment for a voting application. The project
 orchestrates the application services, databases, reverse proxy, and monitoring
 tool required by the T-DOP-603 subject.
 
-## Architecture
+## 🏗️ Architecture
 
 ```text
 User
@@ -21,15 +25,15 @@ Redis ---> Worker ---> PostgreSQL
 
 Components:
 
-- `poll`: Flask web application receiving votes.
-- `redis`: queue storing votes before processing.
-- `worker`: Java application moving votes from Redis to PostgreSQL.
-- `postgres`: persistent database storing votes in the `votes` table.
-- `result`: Node.js web application displaying results.
-- `traefik`: reverse proxy and load balancer.
-- `cadvisor`: monitoring daemon scheduled on every node.
+- `poll` — Flask web application receiving votes.
+- `redis` — queue storing votes before processing.
+- `worker` — Java application moving votes from Redis to PostgreSQL.
+- `postgres` — persistent database storing votes in the `votes` table.
+- `result` — Node.js web application displaying results.
+- `traefik` — reverse proxy and load balancer.
+- `cadvisor` — monitoring daemon scheduled on every node.
 
-## Requirements
+## 📋 Requirements
 
 - Docker Desktop with Kubernetes enabled
 - `kubectl`
@@ -41,7 +45,7 @@ Check that Kubernetes is ready:
 kubectl get nodes
 ```
 
-## Deploy
+## 🚀 Deploy
 
 Apply every manifest:
 
@@ -49,7 +53,7 @@ Apply every manifest:
 kubectl apply --recursive -f bernstein
 ```
 
-Create the `votes` table:
+Wait until PostgreSQL is running, then create the `votes` table:
 
 ```bash
 kubectl exec -i postgres-0 -- psql -U admin -d bernsteindb -c 'CREATE TABLE IF NOT EXISTS votes (id text PRIMARY KEY, vote text NOT NULL);'
@@ -61,15 +65,15 @@ Map the local hostnames:
 echo "127.0.0.1 poll.dop.io result.dop.io" | sudo tee -a /etc/hosts
 ```
 
-## Access
+## 🌐 Access
 
 | Application | URL |
 | --- | --- |
-| Poll | http://poll.dop.io:30021 |
-| Result | http://result.dop.io:30021 |
-| Traefik dashboard | http://localhost:30042/dashboard/ |
+| 🗳️ Poll | http://poll.dop.io:30021 |
+| 📊 Result | http://result.dop.io:30021 |
+| 🔀 Traefik dashboard | http://localhost:30042/dashboard/ |
 
-## Verify
+## ✅ Verify
 
 Check pods:
 
@@ -89,7 +93,8 @@ Check ingresses:
 kubectl get ingress -A
 ```
 
-Check cAdvisor:
+Check cAdvisor. It is not exposed through Traefik and is verified through
+Kubernetes:
 
 ```bash
 kubectl get pods -n kube-system -l app=cadvisor
@@ -110,9 +115,9 @@ curl -I http://result.dop.io:30021
 curl -I http://localhost:30042/dashboard/
 ```
 
-Expected result: the HTTP checks should return `200 OK`.
+> Expected result: the HTTP checks should return `200 OK`.
 
-## Useful Commands
+## 🛠️ Useful Commands
 
 Describe a pod:
 
@@ -138,7 +143,7 @@ Read cAdvisor logs:
 kubectl logs -n kube-system -l app=cadvisor
 ```
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 If `poll.dop.io:30021` or `result.dop.io:30021` does not open, check that
 `/etc/hosts` contains:
@@ -162,7 +167,7 @@ kubectl get svc -n kube-public traefik
 kubectl logs -n kube-public -l app=traefik
 ```
 
-## Cleanup
+## 🧹 Cleanup
 
 Delete all project resources:
 
