@@ -23,7 +23,6 @@ spec:
             - --api.insecure=true
             - --providers.kubernetesingress=true
             - --entrypoints.web.address=:80
-            - --entrypoints.dashboard.address=:8080
           ports:
             - name: web
               containerPort: 80
