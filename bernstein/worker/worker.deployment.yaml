@@ -1,24 +1,23 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: result
+  name: worker
 spec:
-  serviceName: result
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: result
+      app: worker
   template:
     metadata:
       labels:
-        app: result
+        app: worker
     spec:
       containers:
-        - name: result
-          image: epitechcontent/t-dop-600-result:k8s
-          ports:
-            - containerPort: 80
+        - name: worker
+          image: epitechcontent/t-dop-600-worker:k8s
           env:
+            - name: REDIS_HOST
+              value: redis
             - name: POSTGRES_HOST
               value: postgres
             - name: POSTGRES_PORT
@@ -40,4 +39,4 @@ spec:
                   key: POSTGRES_PASSWORD
           resources:
             limits:
-              memory: 128M
+              memory: 256M
