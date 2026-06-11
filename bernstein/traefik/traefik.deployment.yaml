@@ -14,6 +14,13 @@ spec:
         app: traefik
     spec:
       serviceAccountName: traefik
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: traefik
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: traefik
           image: traefik:2.7

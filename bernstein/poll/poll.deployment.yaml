@@ -12,6 +12,13 @@ spec:
       labels:
         app: poll
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: poll
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: poll
           image: epitechcontent/t-dop-600-poll:k8s
